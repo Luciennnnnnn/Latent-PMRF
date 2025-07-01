@@ -1,1 +1,1 @@
-# Latent-PMRF
+# Code would be available upon acceptance.
