@@ -1,0 +1,134 @@
+name: sim_vae_c16
+
+seed: 998244353
+device_specific_seed: true
+workder_specific_seed: true
+
+skip_test: false
+
+data:
+  dataset_name: LSDIR_HR_latent_ram_tag_quality3dot5
+  only_gt: true
+
+  data_dir: datasets/LSDIR/train
+  img_dir: HR_sub_c512_s384
+
+  face_img_dir: datasets/face/FFHQ/FFHQ_512
+  face_num_samples: 10000
+
+  quality_score_dir: HR_sub_c512_s384_qalign_score
+  aesthetic_score_dir: HR_sub_c512_s384_qalign_score
+
+  quality_threshold: 3.5
+  # aesthetic_threshold: 
+
+  file_paths: datasets/LSDIR/train/HR_sub_c512_s384_random_order_image_paths.json
+
+  gt_size: 256
+
+  use_hflip: true
+  use_rot: false
+
+model:
+  arch_opt:
+    arch_type: sim_vae
+    in_channels: 3
+    out_channels: 3
+    down_block_types: ["EncoderBlock2D", "EncoderBlock2D", "EncoderBlock2D", "EncoderBlock2D"]
+    up_block_types: ["DecoderBlock2D", "DecoderBlock2D", "DecoderBlock2D", "DecoderBlock2D"]
+    mid_block_type: "Block2D"
+    mid_block_out_channel: 512
+    block_out_channels: [128, 256, 512, 512]
+    layers_per_block: 2
+    layers_mid_block: 3
+    latent_channels: 16
+    force_upcast: true
+    correct_scale: true
+
+train:
+  # Dataloader
+  batch_size: 8
+  max_train_steps: 150000
+  
+  dataloader_num_workers: 8
+
+  # Optimizer
+  learning_rate: !!float 1e-4
+  scale_lr: false
+  lr_scheduler: timm_cosine
+  t_initial: 200000
+  lr_min: 1e-6
+  cycle_decay: 0.5
+  warmup_t: 500
+  warmup_lr_init: 1e-5
+  warmup_prefix: true
+  t_in_epochs: false
+
+  gradient_accumulation_steps: 1
+  
+  use_8bit_adam: false
+  adam_beta1: 0.9
+  adam_beta2: 0.99
+  adam_weight_decay: !!float 0.01
+  adam_epsilon: !!float 1e-08
+  max_grad_norm: 1
+
+  gradient_checkpointing: false
+  set_grads_to_none: true
+
+  # Misc
+  allow_tf32: false
+  mixed_precision: 'no'
+
+  ema_decay: 0.9999
+
+  rec_loss_type: l1
+  kl_loss_weight: !!float 1e-6
+  lpips_loss_weight: !!float 0
+  perceptual_loss_weight: !!float 0.05
+  perceptual_loss_layer_weights:
+    # before relu
+    'conv1_2': 0.1
+    'conv2_2': 0.1
+    'conv3_4': 1
+    'conv4_4': 1
+    'conv5_4': 1
+      
+val:
+  validation_steps: 500
+  train_visualization_steps: 500
+  validation_fid_steps: 500
+
+  validation_images: [datasets/LSDIR/train/HR_sub_c512_s384/0001000/0000973_s010.png, datasets/LSDIR/train/HR_sub_c512_s384/0082000/0081990_s001.png]
+
+test:
+  datasets:
+    - dataset_name: celeba_512_validation
+      dataset_type: ImageDataset
+      data_dir: datasets/face/celeba_512_validation
+      img_dir: gt
+      num_samples: 25
+    - dataset_name: LSDIR_HR_sub_c512_s384
+      dataset_type: ImageDataset
+      data_dir: datasets/LSDIR/train
+      img_dir: HR_sub_c512_s384
+      file_paths: datasets/LSDIR/train/HR_sub_c512_s384_random_order_image_paths.json
+      num_samples: 25
+
+  test_steps: 2000
+  datasets_in_training: [LSDIR_HR_sub_c512_s384, celeba_512_validation]
+  
+  center_crop: true
+
+  crop_size: 512
+  
+logger:
+  log_with: wandb
+  project_name: sim_vae
+  # log_with:
+
+  checkpointing_steps: 500
+  checkpoints_total_limit: 2
+
+cache_dir: 
+resume_from_checkpoint: latest

@@ -1,0 +1,11 @@
+torch==2.7.1
+torchvision==0.22.1
+accelerate
+diffusers
+wandb
+matplotlib
+Pillow
+tqdm
+omegaconf
+python-dotenv
+einops
