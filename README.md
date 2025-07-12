@@ -20,11 +20,11 @@
 - **2025-07-12**: We release **Sim-VAE**, model weights can be accessed in [huggingface](https://huggingface.co/sienna223/Sim-VAE).
 
 ## Introduction
-**Latent-PMRF** is new framework learning latent-generative models designed for image restoration tasks, which can achieve minimum distortion under the constrain of best perception. More specifically, consider two critical aspects interested in restoration:
-- **Fidelity**: The formulation of Latent-PMRF ensures best achievable fidelity is upper bounded by VAE's reconstruction ability.
-- **Visual Quality**: Since latent-space of VAE is better aligned with human perception than pixel-spacel, Latent-PMRF achieving a 5.79× speedup over PMRF in terms of FID.
-
-Since VAE's reconstruction ability determine fidelity upper-bound of Latent-PMRF, we also propose **Sim-VAE**, which is a streamlined VAE architecture significantly outperforms existing VAEs (SD-VAE, FLUX-VAE) in both reconstruction and restoration.
+**We propose Latent-PMRF, a novel framework for learning latent-generative models tailored for image restoration tasks. The core principle is to achieve minimal distortion under the constraint of optimal perceptual quality.**
+Our framework's design is guided by two critical aspects of image restoration:
+- **Fidelity**: The formulation of Latent-PMRF ensures that its best achievable fidelity is upper-bounded by the reconstruction capability of its underlying Variational Autoencoder (VAE).
+- **Perceptual Quality**: By operating in the VAE's latent space—which is better aligned with human perception than the pixel space—Latent-PMRF not only yields higher visual quality but also achieves a **5.79X** speedup over PMRF in processing time, as demonstrated by superior FID scores.
+Recognizing that the VAE's reconstruction ability dictates the upper bound of fidelity, we also introduce **Sim-VAE**. This streamlined VAE architecture is designed for high-fidelity reconstruction and significantly outperforms existing VAEs (e.g., SD-VAE, FLUX-VAE) in both reconstruction and downstream restoration tasks.
 
 <p align="center">
   <img src="assets/teaser.png" width="95%">
@@ -32,6 +32,17 @@ Since VAE's reconstruction ability determine fidelity upper-bound of Latent-PMRF
   <em>Illustration of perception optimization efficiency in latent space.</em>
 </p>
 
+<p align="center">
+  <img src="assets/convergence_vaes.png" width="95%">
+  <br>
+  <em>Convergence comparison of VAEs.</em>
+</p>
+
+<p align="center">
+  <img src="assets/table_vaes.png" width="95%">
+  <br>
+  <em>Performance comparison of VAEs.</em>
+</p>
 ## 📌 TODO
 - [ ] Weights of Latent-PMRF.
 - [ ] Training code and guidance of Latent-PMRF.
