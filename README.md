@@ -24,6 +24,7 @@
 Our framework's design is guided by two critical aspects of image restoration:
 - **Fidelity**: The formulation of Latent-PMRF ensures that its best achievable fidelity is upper-bounded by the reconstruction capability of its underlying Variational Autoencoder (VAE).
 - **Perceptual Quality**: By operating in the VAE's latent space—which is better aligned with human perception than the pixel space—Latent-PMRF not only yields higher visual quality but also achieves a **5.79X** speedup over PMRF in processing time, as demonstrated by superior FID scores.
+
 Recognizing that the VAE's reconstruction ability dictates the upper bound of fidelity, we also introduce **Sim-VAE**. This streamlined VAE architecture is designed for high-fidelity reconstruction and significantly outperforms existing VAEs (e.g., SD-VAE, FLUX-VAE) in both reconstruction and downstream restoration tasks.
 
 <p align="center">
