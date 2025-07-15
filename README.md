@@ -44,6 +44,7 @@ Recognizing that the VAE's reconstruction ability dictates the upper bound of fi
   <br>
   <em>Performance comparison of VAEs.</em>
 </p>
+
 ## 📌 TODO
 - [ ] Weights of Latent-PMRF.
 - [ ] Training code and guidance of Latent-PMRF.
